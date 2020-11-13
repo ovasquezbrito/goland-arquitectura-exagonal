@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/ovasquezbrito/candyshop/pkg/reading"
 	"github.com/ovasquezbrito/candyshop/pkg/storage"
 	"fmt"
 	"log"
@@ -16,15 +17,10 @@ func main() {
 		log.Fatal("error al configurar conexión con base de datos", err)
 	}
 
-	c, err := r.GetAllCandyNames()
-	if err != nil {
-		log.Fatal("error al consultar lista de dulces", err)
-	}
+	rs := reading.NewService(r)
 
-
-	log.Println(c)
 	fmt.Println("starting server on port 8080")
-	router := rest.InitHandlers()
+	router := rest.InitHandlers(rs)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
